@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>程振宇 | 个人主页</title>
+  <style>
+    /* ===== CSS 变量（浅色蓝紫科技主题） ===== */
+    :root {
+      --bg-main: #f4f8fe; /* 浅色科技蓝背景 */
+      --bg-secondary: #eef3fa;
+      --bg-card: #ffffff;
+      --bg-card-hover: #fafbff;
+      --text-main: #111827; /* 深色文字 */
+      --text-muted: #4b5563;
+      
+      /* 核心主题色：学术蓝 #0b4da2，学术紫 #4c0099 */
+      --primary-blue: #0b4da2;
+      --primary-purple: #4c0099;
+      --primary-gradient: linear-gradient(135deg, #0b4da2 0%, #4c0099 100%);
+      
+      --accent-cyan: #0055ff;
+      --glass-border: rgba(11, 77, 162, 0.08);
+      --shadow-card: 0 8px 24px rgba(11, 77, 162, 0.06);
+      --shadow-hover: 0 12px 32px rgba(11, 77, 162, 0.12);
+      --nav-height: 64px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      color: var(--text-main);
+      background: var(--bg-main);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* ===== 科技感背景系统（适应浅色主题） ===== */
+    .tech-grid-bg {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      /* 使用微小的圆点组成科技网格 */
+      background-image: radial-gradient(#cbd5e1 1.5px, transparent 1.5px);
+      background-size: 24px 24px;
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 70%);
+      pointer-events: none; z-index: -2;
+    }
+    .tech-orbs {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: 
+        radial-gradient(circle at 15% 20%, rgba(11, 77, 162, 0.06), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(76, 0, 153, 0.06), transparent 40%);
+      z-index: -1; pointer-events: none;
+      animation: orbPulse 15s infinite alternate ease-in-out;
+    }
+
+    @keyframes orbPulse {
+      0% { opacity: 0.8; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* ===== 导航栏 ===== */
+    .navbar {
+      position: sticky; top: 0; z-index: 1000;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(11, 77, 162, 0.06);
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled { box-shadow: 0 4px 20px rgba(11, 77, 162, 0.06); }
+    .nav-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 24px;
+      display: flex; justify-content: space-between; align-items: center; height: var(--nav-height);
+    }
+    .nav-logo-img {
+      height: 36px; width: auto; object-fit: contain;
+      border-radius: 6px; padding: 2px 6px; background: #fff;
+      box-shadow: 0 2px 8px rgba(11, 77, 162, 0.1);
+      transition: all 0.3s;
+    }
+    .nav-logo-img:hover { filter: drop-shadow(0 0 8px rgba(11, 77, 162, 0.4)); }
+    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none; font-size: 14px; font-weight: 600;
+      position: relative; transition: color 0.3s; letter-spacing: 0.5px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--primary-blue); }
+    .nav-links a::after {
+      content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px;
+      background: var(--primary-gradient); transition: width 0.3s ease;
+    }
+    .nav-links a:hover::after { width: 100%; }
+    .menu-toggle { display: none; background: none; border: none; color: #111827; font-size: 26px; cursor: pointer; }
+
+    /* ===== 首屏 Hero ===== */
+    .hero {
+      min-height: 88vh; display: flex; align-items: center; justify-content: center;
+      padding: 80px 24px; position: relative;
+    }
+    .hero-content {
+      display: flex; align-items: center; gap: 60px; max-width: 1100px;
+      flex-wrap: wrap; justify-content: center; width: 100%;
+    }
+    .hero-img-wrapper {
+      position: relative; flex-shrink: 0;
+    }
+    /* 头像背后的浅色科技发光环 */
+    .hero-img-wrapper::before {
+      content: ''; position: absolute; inset: -20px;
+      border-radius: 50%; background: var(--primary-gradient);
+      filter: blur(40px); opacity: 0.3; z-index: -1;
+      animation: glowRotate 8s infinite linear;
+    }
+    @keyframes glowRotate {
+      0% { transform: rotate(0deg) scale(0.9); opacity: 0.3; }
+      50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+      100% { transform: rotate(360deg) scale(0.9); opacity: 0.3; }
+    }
+    .hero-photo {
+      width: 240px; height: 240px; border-radius: 50%; object-fit: cover;
+      border: 4px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 0 0 8px rgba(11, 77, 162, 0.15), 0 12px 30px rgba(11, 77, 162, 0.3);
+      background: #e2e8f0;
+    }
+    .hero-text { flex: 1; min-width: 300px; }
+    .hero-text h1 {
+      font-size: 48px; font-weight: 800; letter-spacing: 2px; margin-bottom: 12px; color: #111827;
+    }
+    .hero-text .subtitle {
+      font-size: 20px;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+      font-weight: 700; margin-bottom: 6px;
+    }
+    .hero-text .tagline { font-size: 16px; color: var(--text-muted); margin-bottom: 24px; letter-spacing: 0.5px; }
+    .hero-contact { display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .hero-contact a {
+      color: var(--text-muted); text-decoration: none; font-size: 15px;
+      display: flex; align-items: center; gap: 10px; transition: all 0.3s;
+    }
+    .hero-contact a:hover { color: var(--primary-blue); transform: translateX(6px); }
+    .hero-btn {
+      display: inline-block; padding: 14px 40px;
+      background: var(--primary-gradient); color: #fff;
+      text-decoration: none; font-weight: 600; font-size: 16px;
+      border-radius: 50px; transition: all 0.3s; position: relative;
+      box-shadow: 0 4px 16px rgba(11, 77, 162, 0.4);
+    }
+    .hero-btn:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 28px rgba(11, 77, 162, 0.5);
+    }
+
+    /* ===== 全局通用区块 ===== */
+    section { padding: 100px 24px; position: relative; }
+    .container { max-width: 1100px; margin: 0 auto; position: relative; z-index: 2; }
+    .section-header { text-align: center; margin-bottom: 60px; }
+    .section-header .en {
+      color: var(--primary-blue); font-size: 14px; font-weight: 600; letter-spacing: 4px;
+      text-transform: uppercase; margin-bottom: 8px; display: block;
+    }
+    .section-header h2 {
+      font-size: 36px; font-weight: 700; color: #111827;
+      display: inline-block; position: relative;
+    }
+    .section-header h2::after {
+      content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+      width: 50px; height: 4px; background: var(--primary-gradient); border-radius: 4px;
+      box-shadow: 0 0 10px rgba(11, 77, 162, 0.3);
+    }
+
+    /* ===== 简历总览 ===== */
+    #overview { background: rgba(255, 255, 255, 0.5); }
+    .overview-intro { max-width: 800px; margin: 0 auto 40px; text-align: center; }
+    .overview-intro p { font-size: 16px; color: var(--text-muted); line-height: 1.9; }
+    .overview-intro b { color: #fff; background: var(--primary-gradient); padding: 0 6px; border-radius: 4px; }
+    .stat-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 48px;
+    }
+    .stat-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 32px 16px; text-align: center;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: var(--shadow-card);
+    }
+    .stat-card:hover {
+      transform: translateY(-10px); border-color: rgba(11, 77, 162, 0.2);
+      box-shadow: var(--shadow-hover);
+    }
+    .stat-num {
+      font-size: 48px; font-weight: 800;
+      background: var(--primary-gradient); -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; line-height: 1.2;
+    }
+    .stat-num small { font-size: 24px; -webkit-text-fill-color: var(--text-muted); }
+    .stat-label { font-size: 14px; color: var(--text-muted); margin-top: 8px; }
+    
+    .highlight-tags { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+    .highlight-tags .h-tag {
+      background: rgba(11, 77, 162, 0.08); border: 1px solid rgba(11, 77, 162, 0.15);
+      color: var(--primary-blue); padding: 8px 20px; border-radius: 50px; font-size: 13px; font-weight: 500;
+      transition: all 0.3s; cursor: default;
+    }
+    .highlight-tags .h-tag:hover {
+      background: var(--primary-gradient); border-color: transparent; color: #fff; transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(11, 77, 162, 0.3);
+    }
+
+    /* ===== 教育背景 ===== */
+    .edu-grid { display: grid; gap: 24px; }
+    .edu-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 16px; padding: 28px 32px; box-shadow: var(--shadow-card);
+      transition: all 0.4s; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+      align-items: flex-start;
+    }
+    .edu-card:hover { transform: translateY(-4px); border-color: rgba(11, 77, 162, 0.3); box-shadow: var(--shadow-hover); }
+    .edu-card h3 { font-size: 22px; color: #111827; margin-bottom: 6px; }
+    .edu-card .degree { color: var(--primary-blue); font-weight: 600; margin-bottom: 10px; }
+    .edu-card ul { list-style: none; color: var(--text-muted); font-size: 15px; }
+    .edu-card li { padding-left: 20px; position: relative; margin-bottom: 4px; }
+    .edu-card li::before { content: '▹'; position: absolute; left: 0; color: var(--primary-blue); }
+    .edu-date {
+      color: var(--text-muted); font-size: 14px; background: #f8fafc;
+      padding: 6px 16px; border-radius: 30px; white-space: nowrap; border: 1px solid var(--glass-border);
+    }
+    .edu-card.current { border: 1px solid rgba(76, 0, 153, 0.3); background: rgba(76, 0, 153, 0.02); }
+    .edu-badge {
+      display: inline-block; font-size: 12px; font-weight: 700; color: #fff;
+      background: var(--primary-gradient); padding: 4px 16px; border-radius: 20px; margin-bottom: 10px;
+      box-shadow: 0 4px 12px rgba(11, 77, 162, 0.3);
+    }
+    .edu-date.current-date { border-color: var(--primary-purple); color: var(--primary-purple); font-weight: 600; }
+
+    /* ===== 论文列表 ===== */
+    .paper-list { display: grid; gap: 20px; }
+    .paper-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 20px 24px; box-shadow: var(--shadow-card);
+      transition: all 0.3s; display: flex; gap: 20px; align-items: flex-start;
+    }
+    .paper-card:hover { transform: translateX(8px); border-color: rgba(11, 77, 162, 0.2); box-shadow: var(--shadow-hover); }
+    .paper-num {
+      min-width: 40px; height: 40px; border-radius: 8px;
+      background: var(--primary-gradient); color: #fff; display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(11, 77, 162, 0.3);
+    }
+    .paper-body { flex: 1; }
+    .paper-body .authors { font-size: 14px; color: var(--text-muted); margin-bottom: 4px; }
+    .paper-body .authors b { color: #111827; }
+    .paper-body .title { font-size: 16px; color: #111827; font-weight: 600; margin-bottom: 6px; }
+    .paper-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .tag { font-size: 12px; padding: 4px 14px; border-radius: 20px; font-weight: 600; }
+    .tag-venue { background: rgba(11, 77, 162, 0.1); color: var(--primary-blue); }
+    .tag-status { background: rgba(0, 85, 255, 0.08); color: #0055ff; }
+    .tag-level { background: rgba(76, 0, 153, 0.1); color: var(--primary-purple); }
+    .btn-detail {
+      font-size: 13px; color: var(--primary-blue); background: rgba(11, 77, 162, 0.05); border: 1px solid var(--glass-border);
+      padding: 6px 18px; border-radius: 30px; cursor: pointer; transition: all 0.3s; white-space: nowrap;
+    }
+    .btn-detail:hover { background: var(--primary-gradient); color: #fff; border-color: transparent; box-shadow: 0 4px 12px rgba(11, 77, 162, 0.3); }
+
+    /* ===== 专利 ===== */
+    .patent-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+    .patent-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 12px; padding: 24px; box-shadow: var(--shadow-card);
+      transition: all 0.3s; position: relative; overflow: hidden;
+    }
+    .patent-card::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+      background: var(--primary-gradient); transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+    }
+    .patent-card:hover { transform: translateY(-6px); border-color: rgba(11, 77, 162, 0.2); box-shadow: var(--shadow-hover); }
+    .patent-card:hover::before { transform: scaleX(1); }
+    .patent-card .p-title { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 10px; line-height: 1.5; }
+    .patent-card .p-no { font-size: 13px; color: var(--text-muted); font-family: 'Courier New', monospace; }
+    .patent-card .p-authors { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+
+    /* ===== 项目时间线 ===== */
+    .timeline { position: relative; padding-left: 36px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 12px; top: 10px; bottom: 10px; width: 2px;
+      background: var(--primary-gradient); border-radius: 2px; box-shadow: 0 0 10px rgba(11, 77, 162, 0.3);
+    }
+    .timeline-item { position: relative; margin-bottom: 40px; }
+    .timeline-item::before {
+      content: ''; position: absolute; left: -28px; top: 6px; width: 14px; height: 14px;
+      border-radius: 50%; background: #fff; border: 4px solid var(--primary-blue); box-shadow: 0 0 10px rgba(11, 77, 162, 0.4);
+    }
+    .proj-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 14px; padding: 28px 32px; box-shadow: var(--shadow-card); transition: all 0.3s;
+    }
+    .proj-card:hover { box-shadow: var(--shadow-hover); background: var(--bg-card-hover); }
+    .proj-head { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+    .proj-head h3 { font-size: 19px; color: #111827; flex: 1; min-width: 260px; }
+    .proj-meta { display: flex; gap: 10px; flex-wrap: wrap; }
+    .proj-fund { background: var(--primary-gradient); color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 13px; font-weight: 600; box-shadow: 0 4px 10px rgba(11, 77, 162, 0.3); }
+    .proj-time { background: #f8fafc; color: var(--text-muted); padding: 4px 16px; border-radius: 20px; font-size: 13px; border: 1px solid var(--glass-border); }
+    .proj-role { color: var(--primary-purple); font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+    .proj-desc { color: var(--text-muted); font-size: 15px; margin-bottom: 10px; line-height: 1.8; }
+    .proj-desc strong { color: #111827; }
+
+    /* ===== 荣誉奖项 ===== */
+    .honor-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+    .honor-card {
+      background: var(--bg-card); border: 1px solid var(--glass-border);
+      border-radius: 12px; padding: 24px 16px; text-align: center; box-shadow: var(--shadow-card); transition: all 0.4s;
+    }
+    .honor-card:hover { transform: scale(1.05); border-color: rgba(11, 77, 162, 0.3); box-shadow: var(--shadow-hover); }
+    .honor-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .honor-card .h-title { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 6px; }
+    .honor-card .h-year { color: var(--primary-blue); font-size: 13px; font-weight: 600; }
+
+    /* ===== 技能 ===== */
+    .skill-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .skill-block h3 { font-size: 18px; color: #111827; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 14px; }
+    .skill-tag {
+      background: #f8fafc; padding: 12px 24px; border-radius: 50px; font-size: 15px; color: #111827;
+      border: 1px solid var(--glass-border); box-shadow: var(--shadow-card);
+      transition: all 0.3s; font-weight: 500;
+    }
+    .skill-tag:hover { background: var(--primary-gradient); color: #fff; transform: translateY(-4px); border-color: transparent; box-shadow: 0 4px 12px rgba(11, 77, 162, 0.4); }
+
+    /* ===== 页脚 ===== */
+    footer {
+      background: #eef3fa; border-top: 1px solid var(--glass-border);
+      color: var(--text-muted); text-align: center; padding: 50px 24px;
+    }
+    footer .f-name { font-size: 20px; color: #111827; font-weight: 700; letter-spacing: 2px; margin-bottom: 12px; }
+    footer .f-contact { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 16px; font-size: 14px; }
+    footer .f-contact a { color: var(--primary-blue); text-decoration: none; transition: color 0.3s; }
+    footer .f-contact a:hover { color: var(--primary-purple); }
+    footer .f-copy { font-size: 13px; color: #9ca3af; margin-top: 12px; }
+
+    /* ===== 核心动画 ===== */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        position: absolute; top: var(--nav-height); left: 0; right: 0; flex-direction: column;
+        background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(12px);
+        padding: 0; max-height: 0; overflow: hidden; transition: max-height 0.5s ease;
+        border-bottom: 1px solid var(--glass-border); gap: 0;
+      }
+      .nav-links.open { max-height: 500px; padding: 20px 0; }
+      .nav-links li { text-align: center; padding: 12px 0; border-bottom: 1px solid rgba(11, 77, 162, 0.04); }
+      .menu-toggle { display: block; }
+      .hero-content { flex-direction: column; gap: 24px; text-align: center; }
+      .hero-text { text-align: center; min-width: auto; }
+      .hero-text h1 { font-size: 34px; }
+      .hero-contact { align-items: center; }
+      .hero-photo { width: 180px; height: 180px; }
+      .skill-wrap { grid-template-columns: 1fr; }
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .section-header h2 { font-size: 28px; }
+      .edu-card { padding: 20px; }
+      .paper-card { flex-direction: column; align-items: flex-start; }
+      .proj-card { padding: 20px; }
+      .patent-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 浅色背景科技特效 -->
+  <div class="tech-grid-bg"></div>
+  <div class="tech-orbs"></div>
+
+  <!-- 导航 -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner">
+      <img class="nav-logo-img" src="南大-中科院联培.png" alt="南京大学-中国科学院联合培养" onerror="this.style.display='none'">
+      <button class="menu-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')">☰</button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">首页</a></li>
+        <li><a href="#overview">总览</a></li>
+        <li><a href="#education">教育</a></li>
+        <li><a href="#papers">论文</a></li>
+        <li><a href="#patents">专利</a></li>
+        <li><a href="#projects">项目</a></li>
+        <li><a href="#honors">荣誉</a></li>
+        <li><a href="#skills">技能</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero 首屏 -->
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <div class="hero-img-wrapper">
+        <img class="hero-photo" src="hc_半身像2.png" alt="程振宇 头像" onerror="this.style.background='#e2e8f0'">
+      </div>
+      <div class="hero-text">
+        <h1>程 振 宇</h1>
+        <p class="subtitle">南京大学 · 工学博士生</p>
+        <p class="tagline">医学成像科学与技术系统全国重点实验室 · 计算机技术</p>
+        <div class="hero-contact">
+          <a href="mailto:chengzhenyv23@mails.ucas.edu.cn">✉ chengzhenyv23@mails.ucas.edu.cn</a>
+          <a href="tel:+8613026057985">📱 (+86) 130-2605-7985（微信同号）</a>
+        </div>
+        <a href="#overview" class="hero-btn">简历总览 →</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 简历总览 -->
+  <section id="overview">
+    <div class="container">
+      <div class="overview-intro reveal">
+        <div class="section-header"><div class="en">Profile</div><h2>核心优势一览</h2></div>
+        <p>南京大学-中国科学院联培博士生，专注于 <b>图像分割、路径规划与导航</b> 等前沿方向。在校期间以 <b>第一作者发表 CCF-B / JCR Q2 论文</b>，深度参与多项顶级会议与重大科研项目，具备扎实的 <b>深度学习工程能力与科研落地经验</b>。</p>
+      </div>
+      
+      <div class="stat-grid reveal">
+        <div class="stat-card"><div class="stat-num" data-target="7">0<small>篇</small></div><div class="stat-label">科研论文</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="16">0<small>项</small></div><div class="stat-label">授权国家专利</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="3">0<small>项</small></div><div class="stat-label">重大科研项目</div></div>
+        <div class="stat-card"><div class="stat-num" data-target="3.8">0<small>/4.0</small></div><div class="stat-label">绩点</div></div>
+      </div>
+
+      <div class="highlight-tags reveal">
+        <span class="h-tag">🏅 AAAI · CCF-A</span>
+        <span class="h-tag">🎙️ ICASSP · CCF-B</span>
+        <span class="h-tag">📄 一作 JCR Q2</span>
+        <span class="h-tag">🧠 Sam图像分割</span>
+        <span class="h-tag">🌊 A*算法与中心线提取</span>
+        <span class="h-tag">🤖 路径规划与导航</span>
+        <span class="h-tag">🥇 优秀研究生一等奖</span>
+        <span class="h-tag">💰 国家重点研发计划</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 教育背景 -->
+  <section id="education">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Education</div><h2>教育背景</h2></div>
+      <div class="edu-grid">
+        <div class="edu-card current">
+          <div>
+            <span class="edu-badge">当前教育经历 · 在读</span>
+            <h3>南京大学</h3>
+            <p class="degree">博士研究生 · 计算机学院 电子信息工程</p>
+            <ul>
+              <li>南京大学-中科院深圳先进院集成所联培（深圳先进院培养）</li>
+              <li>研究方向：图像处理，路径规划与导航</li>
+            </ul>
+          </div>
+          <span class="edu-date current-date">2026.6 - 2030.7</span>
+        </div>
+        <div class="edu-card">
+          <div>
+            <h3>中国科学院大学</h3>
+            <p class="degree">工学硕士</p>
+            <ul>
+              <li>医学成像科学与技术系统全国重点实验室</li>
+              <li>绩点：3.8 / 4.0</li>
+            </ul>
+          </div>
+          <span class="edu-date">2023.9 - 2026.6</span>
+        </div>
+        <div class="edu-card">
+          <div>
+            <h3>淮北师范大学</h3>
+            <p class="degree">理学学士</p>
+            <ul>
+              <li>发表两个国家专利</li>
+              <li>国家计算机二级优秀</li>
+              <li>基于 Python + OpenCV 的车牌识别项目</li>
+            </ul>
+          </div>
+          <span class="edu-date">2017.9 - 2021.6</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 科研论文 -->
+  <section id="papers">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Publications</div><h2>科研论文</h2></div>
+      <div class="paper-list">
+        <div class="paper-card"><div class="paper-num">1</div><div class="paper-body"><p class="authors">周寿军, 彭永军, 李茂全, <b>程振宇</b></p><p class="title">手术机器人技术发展现状与前沿趋势</p><div class="paper-tags"><span class="tag tag-venue">中国介入影像与治疗学</span><span class="tag tag-status">已接收 2025</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">2</div><div class="paper-body"><p class="authors"><b>Zhenyu Cheng</b>, Yanbo Hu, Shoujun Zhou, Zhuoxu Cui</p><p class="title">Med-Diffusion: Diffusion Model-Based Imputation of Multimodal Sensor Data for Surgical Patients</p><div class="paper-tags"><span class="tag tag-venue">Sensors</span><span class="tag tag-status">Accepted 2025</span><span class="tag tag-level">JCR Q2</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">3</div><div class="paper-body"><p class="authors"><b>Zhenyu Cheng</b>, Yanbo Hu, Shoujun Zhou</p><p class="title">ConfMamba-SAM: Structured State Space Modeling with Memory-Augmented Prompting for Automatic Brain Lesion Segmentation</p><div class="paper-tags"><span class="tag tag-venue">ICASSP</span><span class="tag tag-status">Accepted 2025</span><span class="tag tag-level">CCF-B</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">4</div><div class="paper-body"><p class="authors">Yanbo Hu, <b>Zhenyu Cheng</b>, Yichen Lin, Xiaojing Long</p><p class="title">Outward Electrical Impedance Tomography for Atherosclerotic Arterial Wall Detection</p><div class="paper-tags"><span class="tag tag-venue">ICIRA</span><span class="tag tag-status">Accepted 2025</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">5</div><div class="paper-body"><p class="authors">Zhenxi Zhang, FuChen Zheng, Adnan Iltaf, Han Yifei, <b>Zhenyu Cheng</b></p><p class="title">Adaptive Morph-Patch Transformer for Aortic Vessel Segmentation</p><div class="paper-tags"><span class="tag tag-venue">AAAI</span><span class="tag tag-status">Accepted 2025</span><span class="tag tag-level">CCF-A</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">6</div><div class="paper-body"><p class="authors">Long Zhang, Yue Du, Yunlong Lin, <b>Zhenyu Cheng</b>, Boyuan Zhang</p><p class="title">A Synergistic Multi-scale Attention and Composite Feature Extraction Network for Coronary Artery Segmentation</p><div class="paper-tags"><span class="tag tag-venue">Bioengineering-Basel</span><span class="tag tag-status">Accepted 2025</span><span class="tag tag-level">JCR Q2</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+        <div class="paper-card"><div class="paper-num">7</div><div class="paper-body"><p class="authors"><b>Zhenyu Cheng</b>, YanBo Hu, Shoujun Zhou</p><p class="title">Contrastive Coarse-to-Fine Segmentation with Prototype Guidance for Automatic Medical Image Segmentation</p><div class="paper-tags"><span class="tag tag-venue">ECCV</span><span class="tag tag-status" style="background:rgba(76, 0, 153, 0.08); color:#4c0099; border-color:rgba(76, 0, 153, 0.2);">Under Review 2026</span></div></div><button class="btn-detail" onclick="alert('论文详情页开发中')">详情</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 科研专利 -->
+  <section id="patents">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Patents</div><h2>科研专利</h2></div>
+      <div class="patent-grid">
+        <div class="patent-card"><p class="p-title">血管分割方法、装置、系统、设备、介质及产品</p><p class="p-no">ZL 2025 1 0542136.3</p><p class="p-authors">周寿军, 程振宇, 胡彦博</p></div>
+        <div class="patent-card"><p class="p-title">血管图像展示方法、装置、设备、介质和产品</p><p class="p-no">ZL 2025 1 1164258.X</p><p class="p-authors">程振宇, 胡彦博, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">一种医学影像重建方法及电子设备</p><p class="p-no">ZL 2025 1 1262024.9</p><p class="p-authors">程振宇, 胡彦博, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">一种数学公式识别方法及电子设备</p><p class="p-no">ZL 2025 1 1187301.4</p><p class="p-authors">程振宇, 胡彦博, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">血管数据补全方法、装置、设备、介质及产品</p><p class="p-no">ZL 2025 1 0510900.9</p><p class="p-authors">周寿军, 程振宇, 胡彦博</p></div>
+        <div class="patent-card"><p class="p-title">图像处理方法、装置、设备、介质和产品</p><p class="p-no">ZL 2025 1 1106347.9</p><p class="p-authors">程振宇, 胡彦博, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">血管图像处理方法、装置、设备、介质和产品</p><p class="p-no">ZL 2025 1 1204145.8</p><p class="p-authors">程振宇, 胡彦博, 隆晓菁, 刘洋</p></div>
+        <div class="patent-card"><p class="p-title">一种电阻抗成像系统</p><p class="p-no">ZL 2025 1 1254930.4</p><p class="p-authors">胡彦博, 程振宇, 林铱宸, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">一种电阻抗成像装置</p><p class="p-no">ZL 2025 1 1255132.3</p><p class="p-authors">胡彦博, 程振宇, 林铱宸, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">膝关节成像方法、装置、服务器及存储介质</p><p class="p-no">ZL 2025 1 1285253.2</p><p class="p-authors">胡彦博, 程振宇, 隆晓菁</p></div>
+        <div class="patent-card"><p class="p-title">一种折叠收纳式座椅</p><p class="p-no">ZL 2020 2 0029963.5</p><p class="p-authors">程振宇, 李文峰, 陈松</p></div>
+        <div class="patent-card"><p class="p-title">一种捕蝇器</p><p class="p-no">ZL 2019 2 1866040.9</p><p class="p-authors">程振宇, 李文峰, 程淑慧</p></div>
+        <div class="patent-card"><p class="p-title">基于对极几何的双目X射线导丝三维定位方法</p><p class="p-no">ZL 2025 1 1514534.0</p><p class="p-authors">周寿军, 刘天勇, 李世杰, 程振宇, 杜悦</p></div>
+        <div class="patent-card"><p class="p-title">一种跨模态医学图像的心脏分割方法</p><p class="p-no">ZL 2025 1 1483813.5</p><p class="p-authors">杜悦, 周鑫源, 张博渊, 程振宇</p></div>
+        <div class="patent-card"><p class="p-title">一种心包脂肪组织的图像分割方法</p><p class="p-no">ZL 2025 1 1492506.3</p><p class="p-authors">杜悦, 周鑫源, 张博渊, 程振宇</p></div>
+        <div class="patent-card"><p class="p-title">基于MR图像的心包脂肪组织分割方法</p><p class="p-no">ZL 2025 1 1508851.1</p><p class="p-authors">杜悦, 张博渊, 周鑫源, 程振宇</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 项目经历 -->
+  <section id="projects">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Projects</div><h2>项目经历</h2></div>
+      <div class="timeline">
+        <div class="timeline-item"><div class="proj-card"><div class="proj-head"><h3>脑血管实时介入移动式手术机器人系统研发 · 产业化应用研究</h3><div class="proj-meta"><span class="proj-fund">240 万</span><span class="proj-time">2024.1 - 2028.12</span></div></div><p class="proj-role">国家重点研发计划项目 · 主要参与人员</p><p class="proj-desc">负责<strong>脑血管分割、平面重建算法</strong>的研究与实现，脑血管研究论文调研、数据集查找与处理，辅助脑血管实时介入影像系统研发。已完成三项专利、投稿两篇会议论文、完成一篇期刊论文。</p></div></div>
+        <div class="timeline-item"><div class="proj-card"><div class="proj-head"><h3>心血管及外周血管智能介入机器人及其自主导航方法研究</h3><div class="proj-meta"><span class="proj-fund">600 万</span><span class="proj-time">2025.1 - 2027.12</span></div></div><p class="proj-role">深圳市医学研究专项资金项目 · 主要参与人员</p><p class="proj-desc">负责<strong>体膜血管与主动脉血管分割、中心线提取、血管平面重建算法</strong>的研究与实现，辅助智能介入机器人影像系统研发。实现感-驱-控一体的 <strong>Embodied AI-VIR 系统</strong>。</p></div></div>
+        <div class="timeline-item"><div class="proj-card"><div class="proj-head"><h3>骨科手术机器人双目导航系统研发</h3><div class="proj-meta"><span class="proj-fund">120 万</span><span class="proj-time">2022.11 - 2025.10</span></div></div><p class="proj-role">深圳市重大技术攻关项目 · 主要参与人员</p><p class="proj-desc">负责<strong>脊柱 3D 医学影像分割</strong>、骨科手术机器人双目导航系统研发、腿骨 3D 打印扫描与数据处理。突破机械臂精准标定控制、运动路径规划仿真等关键技术。</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 荣誉奖项 -->
+  <section id="honors">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Honors</div><h2>荣誉奖项</h2></div>
+      <div class="honor-grid">
+        <div class="honor-card"><span class="honor-icon">🥇</span><p class="h-title">国科大优秀研究生奖学金一等奖</p><p class="h-year">2026</p></div>
+        <div class="honor-card"><span class="honor-icon">🌟</span><p class="h-title">中国科学院大学三好学生</p><p class="h-year">2025</p></div>
+        <div class="honor-card"><span class="honor-icon">🏆</span><p class="h-title">第十八届"挑战杯"广东省三等奖</p><p class="h-year">2025</p></div>
+        <div class="honor-card"><span class="honor-icon">💡</span><p class="h-title">"国科大杯"创新创业大赛二等奖</p><p class="h-year">2024</p></div>
+        <div class="honor-card"><span class="honor-icon">🚀</span><p class="h-title">第十六届深圳创新创业大赛行业决赛</p><p class="h-year">2024</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 专业技能 -->
+  <section id="skills">
+    <div class="container reveal">
+      <div class="section-header"><div class="en">Skills</div><h2>专业技能</h2></div>
+      <div class="skill-wrap">
+        <div class="skill-block"><h3>💻 编程与算法</h3><div class="skill-tags"><span class="skill-tag">Python</span><span class="skill-tag">PyTorch</span><span class="skill-tag">深度学习</span><span class="skill-tag">机器学习</span><span class="skill-tag">Java</span><span class="skill-tag">C++</span></div></div>
+        <div class="skill-block"><h3>🛠️ 专业软件</h3><div class="skill-tags"><span class="skill-tag">3D Slicer</span><span class="skill-tag">ITK-SNAP</span><span class="skill-tag">Xshell</span></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <p class="f-name">程振宇 · Zhenyu Cheng</p>
+    <div class="f-contact">
+      <a href="mailto:chengzhenyv23@mails.ucas.edu.cn">✉ chengzhenyv23@mails.ucas.edu.cn</a>
+      <a href="tel:+8613026057985">📱 (+86) 130-2605-7985</a>
+    </div>
+    <p class="f-copy">© 2026 程振宇 · 南京大学 · 中国科学院大学 · Medical Imaging & Surgical Robotics</p>
+  </footer>
+
+  <script>
+    /* ===== 1. 滚动渐入动画 (Intersection Observer) ===== */
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+
+    /* ===== 2. 酷炫数字滚动递增动画 ===== */
+    const statNums = document.querySelectorAll('.stat-num');
+    const numObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.done) {
+          entry.target.dataset.done = "1";
+          const el = entry.target;
+          const target = parseFloat(el.dataset.target);
+          const suffix = el.innerHTML.replace(/^[\d.]+/, '');
+          const isFloat = target.toString().includes('.');
+          let cur = 0;
+          const step = target / 40;
+          const timer = setInterval(() => {
+            cur += step;
+            if (cur >= target) {
+              cur = target;
+              clearInterval(timer);
+            }
+            el.innerHTML = (isFloat ? cur.toFixed(1) : Math.floor(cur)) + suffix;
+          }, 20);
+        }
+      });
+    }, { threshold: 0.4 });
+    statNums.forEach(n => numObserver.observe(n));
+
+    /* ===== 3. 导航栏滚动阴影 ===== */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        navbar.classList.add('scrolled');
+      } else {
+        navbar.classList.remove('scrolled');
+      }
+    });
+
+    /* ===== 4. 移动端菜单关闭 ===== */
+    document.querySelectorAll('#navLinks a').forEach(a => {
+      a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+    });
+  </script>
+</body>
+</html>
